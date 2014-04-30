@@ -60,9 +60,15 @@ if ($ispriv eq "S") {
       );
       die "graph failed: $ERR\n" if $ERR;
     }
-
     my $ghash = "0"; my $ghwe = "0"; my $gshacc = "0"; 
-    my $res = &sendAPIcommand("asc",$i);
+    my $currmconf = ${$conf}{settings}{current_mconf}; 
+    my $minerbin = ${$conf}{miners}{$currmconf}{mpath}; 
+    my $res;
+    if ($minerbin =~ m/bfgminer/) {
+      $res = &sendAPIcommand("pga",$i);
+    } else {
+      $res = &sendAPIcommand("asc",$i);
+    }
     if ($res =~ m/MHS\sav=(\d+\.\d+),/) {
     	$ghash = $1 * 1000;
     }
