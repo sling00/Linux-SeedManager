@@ -154,11 +154,13 @@ sub getCGMinerStats {
 
   my $conf = &getConfig;
   my %conf = %{$conf};  
+  my $currmconf = ${$conf}{settings}{current_mconf}; 
   my $minerbin = ${$conf}{miners}{$currmconf}{mpath}; 
+  my $res;
   if ($minerbin =~ m/bfgminer/) {
-    my $res = &sendAPIcommand("pga",$asc);
+    $res = &sendAPIcommand("pga",$asc);
   } else {
-    my $res = &sendAPIcommand("asc",$asc);
+    $res = &sendAPIcommand("asc",$asc);
   }
 
   if ($res =~ m/MHS\s\ds=(\d+\.\d+),/) {
