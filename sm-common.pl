@@ -156,12 +156,13 @@ sub getCGMinerStats {
   my %conf = %{$conf};  
   my $currmconf = ${$conf}{settings}{current_mconf}; 
   my $minerbin = ${$conf}{miners}{$currmconf}{mpath}; 
-  my $res;
+  my $cmd;
   if ($minerbin =~ m/bfgminer/) {
-    $res = &sendAPIcommand("pga",$asc);
+    $cmd = "pga";
   } else {
-    $res = &sendAPIcommand("asc",$asc);
+    $cmd = "asc";
   }
+  my $res = &sendAPIcommand($cmd, $asc);
 
   if ($res =~ m/MHS\s\d+s=(\d+\.\d+),/) {
     $data->{'hashrate'} = $1 * 1000;
