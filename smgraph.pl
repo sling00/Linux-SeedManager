@@ -63,12 +63,13 @@ if ($ispriv eq "S") {
     my $ghash = "0"; my $ghwe = "0"; my $gshacc = "0"; 
     my $currmconf = ${$conf}{settings}{current_mconf}; 
     my $minerbin = ${$conf}{miners}{$currmconf}{mpath}; 
-    my $res;
+    my $cmd;
     if ($minerbin =~ m/bfgminer/) {
-      $res = &sendAPIcommand("pga",$i);
+      $cmd = "pga";
     } else {
-      $res = &sendAPIcommand("asc",$i);
+      $cmd = "asc";
     }
+    my $res = &sendAPIcommand($cmd,$i);
     if ($res =~ m/MHS\sav=(\d+\.\d+),/) {
     	$ghash = $1 * 1000;
     }
