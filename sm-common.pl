@@ -151,7 +151,16 @@ sub getCGMinerPools {
 
 sub getCGMinerStats {
   my ($asc, $data, @pools) = @_;
-  my $res = &sendAPIcommand("asc",$asc);
+
+  my $conf = &getConfig;
+  my %conf = %{$conf};  
+  my $minerbin = ${$conf}{miners}{$currmconf}{mpath}; 
+  if ($minerpath =~ m/bfgminer/) {
+    my $res = &sendAPIcommand("pga",$asc);
+  } else {
+    my $res = &sendAPIcommand("asc",$asc);
+  }
+
   if ($res =~ m/MHS\s\ds=(\d+\.\d+),/) {
     $data->{'hashrate'} = $1 * 1000;
   }
