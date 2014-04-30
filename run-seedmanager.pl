@@ -33,7 +33,7 @@ if ($conf{settings}{do_boot} == 1) {
   $uptime =~ /^(\d+)\.\d+\s+\d+\.\d+/;
   my $rigup = $1;
   if (($rigup < 300)) {
-    my $mcheck = `ps -eo command | grep -cE [P]M-miner`;
+    my $mcheck = `ps -eo command | grep -cE [S]M-miner`;
     if ($mcheck == 0) {
       &startCGMiner;
    }
