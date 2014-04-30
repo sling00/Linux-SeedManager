@@ -155,7 +155,7 @@ sub getCGMinerStats {
   my $conf = &getConfig;
   my %conf = %{$conf};  
   my $minerbin = ${$conf}{miners}{$currmconf}{mpath}; 
-  if ($minerpath =~ m/bfgminer/) {
+  if ($minerbin =~ m/bfgminer/) {
     my $res = &sendAPIcommand("pga",$asc);
   } else {
     my $res = &sendAPIcommand("asc",$asc);
