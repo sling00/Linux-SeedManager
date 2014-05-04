@@ -73,13 +73,30 @@ sub getCGMinerConfig {
   return(@mconfig);
 }
 
+#sub getCGMinerASCCount {
+#  my $data = &sendAPIcommand("asccount",);
+#  while ($data =~ m/Count=(\d+)/g) {
+#    return $1; 
+#  }
+#}
+
 sub getCGMinerASCCount {
-  my $data = &sendAPIcommand("asccount",);
+  my $conf = &getConfig;
+  my %conf = %{$conf};
+  my $currmconf = ${$conf}{settings}{current_mconf};
+  my $minerbin = ${$conf}{miners}{$currmconf}{mpath};
+  my $cmd1;
+  if ($minerbin =~ m/bfgminer/) {
+    $cmd1 = "pgacount";
+  } else {
+    $cmd1 = "asccount";
+  }
+  #my $res = &sendAPIcommand($cmd, $asc);
+  my $data = &sendAPIcommand("$cmd1",);
   while ($data =~ m/Count=(\d+)/g) {
     return $1; 
   }
 }
-
 sub getCGMinerPools {  
   my @pools;
   my $data = &sendAPIcommand("pools",);
