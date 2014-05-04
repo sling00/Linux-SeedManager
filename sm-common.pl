@@ -20,7 +20,7 @@ my $conf = &getConfig;
 my %conf = %{$conf};
 my $currmconf = ${$conf}{settings}{current_mconf};
 my $minerbin = ${$conf}{miners}{$currmconf}{mpath};
-
+my $conffile = "/opt/ifmi/seedmanager.conf";
 sub addPool {
   my $purl = $_[0];
   my $puser = $_[1];
@@ -315,7 +315,6 @@ sub getCGMinerSummary {
 }
 
 sub getConfig {
-  my $conffile = '/opt/ifmi/seedmanager.conf';
   if (! -e $conffile) {
     exec('/usr/lib/cgi-bin/sconfig.pl');
   } 
@@ -473,7 +472,6 @@ sub startCGMiner {
     my $cmd = "/usr/bin/screen -d -m -S SM-miner $minerbin --config $savepath $mineropts"; 
     &blog("starting miner with cmd: $cmd") if (defined(${$conf}{settings}{verbose}));
     ${$conf}{settings}{running_mconf} = $currmconf;
-    my $conffile = "/opt/ifmi/seedmanager.conf";
     DumpFile($conffile, $conf); 
     exec($cmd);
     exit(0);
@@ -484,6 +482,44 @@ sub stopCGMiner {
   &sendAPIcommand("quit",);
 }
 
+sub setPoolSuperPri {
+  my $spool = $_[0];
+  my $acount = 0;
+  for (keys %{$conf{pools}}) {
+    if ((${$conf}{pools}{$_}{spri} == 1) && ($spool ne ${$conf}{pools}{$_}{url})) {
+      ${$conf}{pools}{$_}{spri} = 0;
+    }
+    if ($spool eq ${$conf}{pools}{$_}{url}) {
+      ${$conf}{pools}{$_}{spri} = 1;
+      $acount++;
+    }
+  }
+  if ($acount == 0 && $spool ne "z") { 
+    my $newa = (keys %{$conf{pools}}); $newa++;
+    ${$conf}{pools}{$newa}{url} = $spool;
+    ${$conf}{pools}{$newa}{spri} = 1;
+  }
+  DumpFile($conffile, $conf); 
+  &resetPoolSuperPri;
+}
+
+sub resetPoolSuperPri {
+  my $pnum; my $spool = "x"; 
+  my @pools = &getCGMinerPools(1);
+  for (keys %{$conf{pools}}) {
+    my $spval = ${$conf}{pools}{$_}{spri};
+    if (defined $spval && $spval == 1) {
+      $spool = ${$conf}{pools}{$_}{url};
+    }
+  }
+  for (my $i=0;$i<@pools;$i++) {
+    my $pname = ${$pools[$i]}{'url'};
+    if ($spool eq $pname) {
+      $pnum = ${$pools[$i]}{'poolid'};
+      &sendAPIcommand("poolpriority",$pnum);
+    }
+  }
+}
 sub switchPool {
   my $preq = $_[0];
   &sendAPIcommand("switchpool",$preq);
