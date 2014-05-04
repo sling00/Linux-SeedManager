@@ -30,6 +30,7 @@ if (defined $zreq) {
 my $preq = $in{'swpool'};
 if (defined $preq) {
   &switchPool($preq);
+  &resetPoolSuperPri;
   $preq = "";
 }
 
@@ -148,6 +149,10 @@ if ((defined $prl) && ($prl ne "")) {
 	$prl = "";
 }
 
+my $rpri = $in{'rpri'}; 
+	if (defined $rpri) {
+	&setPoolSuperPri($rpri);
+}
 # Now carry on
 
 my $miner_name = `hostname`;
@@ -735,7 +740,13 @@ if ($ispriv eq "S") {
 	      	$psum .= "<input type='hidden' name='qpool' value='$i'>";
 	      	$psum .= "<input type='submit' value='Set'></form></td>";
 	      }
-	     	$psum .= "<td>" . $ppri . "</td>" if ($mstrategy eq "Failover");
+	     	if ($mstrategy eq "Failover") {
+	      	if ((defined $spri) && ($spri == 1)) {
+			     	$psum .= "<td bgcolor='yellow'>" . $ppri . "</td>";
+			    } else {
+			     	$psum .= "<td>" . $ppri . "</td>";
+			    }
+	     	}
       	$psum .= "</tr>";
       }
 	  }
@@ -746,6 +757,7 @@ if ($ispriv eq "S") {
 	  $psum .= "</td><td><input type='submit' value='Add'>"; 
 	  $psum .= "</td></form>";
 	  if ($mstrategy eq "Failover") {
+		  $psum .= "<TD class='header' colspan=2><form name='padd' method='POST'>";
 			$psum .= "<select name='rpri'>";
 			for (my $i=0;$i<@pools+1;$i++) {
 				if (@pools>$i) {
@@ -755,7 +767,7 @@ if ($ispriv eq "S") {
 	  	  	$psum .= "<option value='z'>off</option>";
 	  	  }
   	  }
-			$psum .= "</select><br><small>Super Pri</small> <input type='submit' value='Set'>";
+		  $psum .= "</select><br><small>Super Pri</small> <input type='submit' value='Set'>";
 		  $psum .= "</form></td>";	  			
 	  }
 	  if ($mstrategy eq "Load Balance") {
