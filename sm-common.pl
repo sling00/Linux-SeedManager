@@ -72,14 +72,6 @@ sub getCGMinerConfig {
   push(@mconfig, ({strategy=>$mstrategy, fonly=>$mfonly, scantime=>$mscant, queue=>$mqueue, expiry=>$mexpiry }) );
   return(@mconfig);
 }
-
-#sub getCGMinerASCCount {
-#  my $data = &sendAPIcommand("asccount",);
-#  while ($data =~ m/Count=(\d+)/g) {
-#    return $1; 
-#  }
-#}
-
 sub getCGMinerASCCount {
   my $conf = &getConfig;
   my %conf = %{$conf};
