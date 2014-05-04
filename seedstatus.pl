@@ -233,11 +233,7 @@ if (@ascs) {
 	$a1put .= "<TD class='header'>Pool</TD>";
 	$a1put .= "<TD class='header' colspan=2>Accept/Reject</TD>";
 	$a1put .= "<TD class='header'>HW</TD>";
-	my ($i=0;$i<@ascs;$i++);
-	if ($i == $showasc) {
-	if (defined $ascs[$i]{'current_temp_0_c'}) {
-	$a1put .= "<TD class='header'>Temp</TD></tr>";
-		}
+	$a1put .= "<TD class='header'>Temp</TD></tr>" if (defined $ascs[0]{'current_temp_0_c'}); 
 	}
 #	$a1put .= "<TD class='header'>Frequency</TD>";
 #	$a1put .= "<TD class='header'>Serial ID</TD>";
