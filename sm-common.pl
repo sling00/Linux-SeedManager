@@ -91,7 +91,6 @@ sub getCGMinerASCCount {
   } else {
     $cmd1 = "asccount";
   }
-  #my $res = &sendAPIcommand($cmd, $asc);
   my $data = &sendAPIcommand("$cmd1",);
   while ($data =~ m/Count=(\d+)/g) {
     return $1; 
