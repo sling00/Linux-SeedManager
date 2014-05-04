@@ -171,7 +171,9 @@ sub getCGMinerStats {
     $cmd = "asc";
   }
   my $res = &sendAPIcommand($cmd, $asc);
-
+  if ($res =~ m/Name=(\w+),/) {
+    $data->{'devid'} = $1;
+  }   
   if ($res =~ m/MHS\s\d+s=(\d+\.\d+),/) {
     $data->{'hashrate'} = $1 * 1000;
   }

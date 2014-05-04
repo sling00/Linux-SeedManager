@@ -397,15 +397,16 @@ if (@ascs) {
 
 		my $ascurl = "?";	
 		$ascurl .= "asc=$i";
+		my $ascid = $ascs[$i]{'devid'};
 		if ($problems)
 		{
-			$aput = '<TR><TD class="bigger"><A href="' . $ascurl . '">' . $i . '</TD><TD class=error><img src=/IFMI/error24.png></td>' . $aput;
+			$aput = '<TR><TD class="bigger"><A href="' . $ascurl . '">' . $ascid . $i . '</TD><TD class=error><img src=/IFMI/error24.png></td>' . $aput;
 			$problemascs++;
 		}
 		else
 		{
-			$aput = '<TR><TD class="bigger"><A href="' . $ascurl . '">' . $i . '</TD><TD><img src=/IFMI/ok24.png></td>' . $aput;
-			$okascs++;
+		$aput = '<TR><TD class="bigger"><A href="' . $ascurl . '">' . $ascid  . $i . '</TD><TD><img src=/IFMI/ok24.png></td>' . $aput;	
+		$okascs++;
 		}
 		$a1put .= $aput;
 		$problems = 0;
