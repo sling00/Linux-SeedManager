@@ -431,9 +431,9 @@ sub setASCDisable {
   my $minerbin = ${$conf}{miners}{$currmconf}{mpath};
   my $cmd2;
   if ($minerbin =~ m/bfgminer/) {
-    $cmd2 = "ascdisable";
-  } else {
     $cmd2 = "pgadisable";
+  } else {
+    $cmd2 = "ascdisable";
   }
  &sendAPIcommand("$cmd2",$ascid);
 }
@@ -446,9 +446,9 @@ sub setASCEnable {
   my $minerbin = ${$conf}{miners}{$currmconf}{mpath};
   my $cmd3;
   if ($minerbin =~ m/bfgminer/) {
-    $cmd3 = "ascenable";
-  } else {
     $cmd3 = "pgaenable";
+  } else {
+    $cmd3 = "ascenable";
   }
  &sendAPIcommand("$cmd3",$ascid);
 }
@@ -463,9 +463,9 @@ sub setASCIntensity {
   my $minerbin = ${$conf}{miners}{$currmconf}{mpath};
   my $cmd4;
   if ($minerbin =~ m/bfgminer/) {
-    $cmd4 = "ascintensity";
-  } else {
     $cmd4 = "pgaintensity";
+  } else {
+    $cmd4 = "ascintensity";
   }
  &sendAPIcommand("$cmd4",$gif);
 }
@@ -478,9 +478,9 @@ sub setASCRestart {
   my $minerbin = ${$conf}{miners}{$currmconf}{mpath};
   my $cmd5;
   if ($minerbin =~ m/bfgminer/) {
-    $cmd5 = "ascrestart";
-  } else {
     $cmd5 = "pgarestart";
+  } else {
+    $cmd5 = "ascrestart";
   }
  &sendAPIcommand("$cmd5",$ascid);
 }
