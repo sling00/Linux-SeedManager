@@ -382,12 +382,16 @@ if (@ascs) {
 			
 		if ($i == $showasc)
 		{
+			if (defined $ascs[$i]{'current_temp_0_c'}) {
 			$asput .= "<tr><td>Temp:</td><td>" . sprintf("%.1f", $ascs[$i]{'current_temp_0_c'}) . ' C</td>';
+			}
 		}
+		if (defined $ascs[$i]{'current_temp_0_c'}) {
 		$aput .= '<td>';
-	
+		}	
+		if (defined $ascs[$i]{'current_temp_0_c'}) {
 		$aput .= sprintf("%.1f", $ascs[$i]{'current_temp_0_c'}) . ' C</td>';
-
+		}
 		if ($i == $showasc)
 		{
 			$agimg = "<br><img src='/IFMI/graphs/asc$i.png'>";
