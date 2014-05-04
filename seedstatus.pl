@@ -427,7 +427,7 @@ if (@mconfig) {
 my $mcontrol;
 $mcontrol .= "<table id='mcontrol'><tr>";
 my $surl = "?"; $surl .= 'miner=$i';
-$mcontrol .= '<TD class="bigger"><A href="' . TEST $surl . '">Miner</a></td>';
+$mcontrol .= '<TD class="bigger"><A href="' . $surl . '">Miner</a></td>';
 my $mname; my $mvers; my $avers; 
 if ($version =~ m/(\w+?)=(\d+\.\d+\.\d+),API=(\d+\.\d+)/) {
 	$mname = $1;
