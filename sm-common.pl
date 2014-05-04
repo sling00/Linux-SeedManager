@@ -16,10 +16,10 @@ setlogsock('unix');
 use JSON::XS;
 use File::Copy;
 #Globals
-$conf = &getConfig;
-%conf = %{$conf};
-$currmconf = ${$conf}{settings}{current_mconf};
-$minerbin = ${$conf}{miners}{$currmconf}{mpath};
+my $conf = &getConfig;
+my %conf = %{$conf};
+my $currmconf = ${$conf}{settings}{current_mconf};
+my $minerbin = ${$conf}{miners}{$currmconf}{mpath};
 
 sub addPool {
   my $purl = $_[0];
@@ -84,7 +84,7 @@ sub getCGMinerASCCount {
   } else {
     $cmd = "asccount";
   }
-  my $data = &sendAPIcommand("$cmd1",);
+  my $data = &sendAPIcommand("$cmd",);
   while ($data =~ m/Count=(\d+)/g) {
     return $1; 
   }
@@ -422,7 +422,7 @@ sub setASCDisable {
   } else {
     $cmd = "ascdisable";
   }
- &sendAPIcommand("$cmd2",$ascid);
+ &sendAPIcommand("$cmd",$ascid);
 }
 
 sub setASCEnable {
@@ -433,7 +433,7 @@ sub setASCEnable {
   } else {
     $cmd = "ascenable";
   }
- &sendAPIcommand("$cmd3",$ascid);
+ &sendAPIcommand("$cmd",$ascid);
 }
 
 sub setASCIntensity {
@@ -446,7 +446,7 @@ sub setASCIntensity {
   } else {
     $cmd = "ascintensity";
   }
- &sendAPIcommand("$cmd4",$gif);
+ &sendAPIcommand("$cmd",$gif);
 }
 
 sub setASCRestart {
@@ -457,7 +457,7 @@ sub setASCRestart {
   } else {
     $cmd = "ascrestart";
   }
- &sendAPIcommand("$cmd5",$ascid);
+ &sendAPIcommand("$cmd",$ascid);
 }
 
 sub startCGMiner {
