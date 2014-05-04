@@ -741,7 +741,17 @@ if ($ispriv eq "S") {
 	  $psum .= "</td><td><input type='submit' value='Add'>"; 
 	  $psum .= "</td></form>";
 	  if ($mstrategy eq "Failover") {
-		  $psum .= "<TD class='header' colspan=2></td>";	  			
+			$psum .= "<select name='rpri'>";
+			for (my $i=0;$i<@pools+1;$i++) {
+				if (@pools>$i) {
+					my $pname = ${$pools[$i]}{'url'};
+	  	  	$psum .= "<option value=$pname>pool $i</option>";	  	  	
+	  	  } else { 
+	  	  	$psum .= "<option value='z'>off</option>";
+	  	  }
+  	  }
+			$psum .= "</select><br><small>Super Pri</small> <input type='submit' value='Set'>";
+		  $psum .= "</form></td>";	  			
 	  }
 	  if ($mstrategy eq "Load Balance") {
 		  $psum .= "<TD class='header' colspan=2>Failover-Only:<br>$mfonly</td>";
