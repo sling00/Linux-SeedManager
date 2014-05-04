@@ -99,7 +99,6 @@ if (defined $gdig) {
  &saveConfig();
  $gdig = "";
 }
-
 my $geng = $in{'geng'};
 if (defined $geng) {
  &setASCEnable($geng);
@@ -228,7 +227,7 @@ my $okascs = 0;
 my $problemascs = 0;
 
 if (@ascs) {
-	$a1put .= "<TABLE id='asccontent'><TR class='header'><TD class='header'>ASC</TD>";
+	$a1put .= "<TABLE id='asccontent'><TR class='header'><TD class='header'>ASIC</TD>";
 	$a1put .= "<TD class='header'>Status</TD>";
 	$a1put .= "<TD class='header'>Rate</TD>";
 	$a1put .= "<TD class='header'>Pool</TD>";
@@ -245,7 +244,7 @@ if (@ascs) {
 	  my $ghealth = $ascs[$i]{'status'}; 
 	  if ($ghealth ne "Alive") {
 			$problems++;
-			push(@nodemsg, "ASC $i is $ghealth");
+			push(@nodemsg, "ASIC $i is $ghealth");
 			if ($i == $showasc) {
 				push(@ascmsg, "$ghealth");
 				$asput .= "<tr><td>Status:</td><td class='error'>$ghealth</td>";
@@ -290,7 +289,7 @@ if (@ascs) {
 		if ($ghashrate < $conf{monitoring}{monitor_hash_lo})
 		{
 			$problems++;
-			push(@nodemsg, "ASC $i is below minimum hash rate");
+			push(@nodemsg, "ASIC $i is below minimum hash rate");
 			if ($i == $showasc)
 			{
 				push(@ascmsg, "Below minimum hash rate");
@@ -327,7 +326,7 @@ if (@ascs) {
 			if ($rr > ${$conf}{monitoring}{monitor_reject_hi})
 			{
 				$problems++;
-				push(@nodemsg, "ASC $i is above maximum reject rate");
+				push(@nodemsg, "ASIC $i is above maximum reject rate");
 				if ($i == $showasc)
 				{
 					push(@ascmsg, "Above maximum reject rate");
@@ -362,7 +361,7 @@ if (@ascs) {
 	  my $ghwe = $ascs[$i]{'hardware_errors'};	
 		if ($ghwe > ${$conf}{monitoring}{monitor_hardware_hi}) { 
 		  $problems++;
-		  push(@nodemsg, "ASC $i has hardware errors");
+		  push(@nodemsg, "ASIC $i has hardware errors");
 		  if ($i == $showasc) {
 			push(@ascmsg, "Hardware errors");
 		  }
@@ -377,7 +376,7 @@ if (@ascs) {
 
 		if ($i == $showasc)
 		{
-	    push(@ascmsg, "ASC $i has Hardware Errors") if ($ghwe > ${$conf}{monitoring}{monitor_hardware_hi});		
+	    push(@ascmsg, "ASIC $i has Hardware Errors") if ($ghwe > ${$conf}{monitoring}{monitor_hardware_hi});		
 			$asput .= "<td>HW Errors:</td>" . $aschwe . "</tr>"; 
 		}
 			
@@ -791,15 +790,15 @@ print " reject ratio";
 print "<TD class='overview'>";
 if ($problemascs > 1){
   if ($problemascs == 1) {
-  	print $problemascs . " ASC has problems<br>";
+  	print $problemascs . " ASIC has problems<br>";
   } else {
-	print $problemascs . " of " . @ascs . " ASCs have problems<br>";
+	print $problemascs . " of " . @ascs . " ASICs have problems<br>";
   }
 } else { 
   if ($okascs == 1) {
-	print $okascs . " ASC is OK<br>";
+	print $okascs . " ASIC is OK<br>";
   } else {
-	print $okascs . " of " . @ascs . " ASCs are OK<br>";
+	print $okascs . " of " . @ascs . " ASICs are OK<br>";
   }
 }
 $minehe = "0" if (!defined $minehe); 
@@ -836,7 +835,7 @@ given(my $x) {
 		print "tok=1> << Back to overview</A>";
 		print "</td></tr>";	
 		print "<tr><td class='header'>";	
-		print "<table><tr><td class='bigger'>ASC $showasc<br>";	
+		print "<table><tr><td class='bigger'>ASIC $showasc<br>";	
 		print sprintf("%d", $ascs[$showasc]{'hashrate'}) . " Kh/s</td></tr>";	
 		print "<tr><td>";
 		if (@ascmsg) {

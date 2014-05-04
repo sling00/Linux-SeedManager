@@ -72,14 +72,22 @@ sub getCGMinerConfig {
   push(@mconfig, ({strategy=>$mstrategy, fonly=>$mfonly, scantime=>$mscant, queue=>$mqueue, expiry=>$mexpiry }) );
   return(@mconfig);
 }
-
 sub getCGMinerASCCount {
-  my $data = &sendAPIcommand("asccount",);
+  my $conf = &getConfig;
+  my %conf = %{$conf};
+  my $currmconf = ${$conf}{settings}{current_mconf};
+  my $minerbin = ${$conf}{miners}{$currmconf}{mpath};
+  my $cmd1;
+  if ($minerbin =~ m/bfgminer/) {
+    $cmd1 = "pgacount";
+  } else {
+    $cmd1 = "asccount";
+  }
+  my $data = &sendAPIcommand("$cmd1",);
   while ($data =~ m/Count=(\d+)/g) {
     return $1; 
   }
 }
-
 sub getCGMinerPools {  
   my @pools;
   my $data = &sendAPIcommand("pools",);
@@ -414,24 +422,64 @@ sub sendAPIcommand {
 
 sub setASCDisable {
  my $ascid = $_[0];
- &sendAPIcommand("ascdisable",$ascid);
+  my $conf = &getConfig;
+  my %conf = %{$conf};
+  my $currmconf = ${$conf}{settings}{current_mconf};
+  my $minerbin = ${$conf}{miners}{$currmconf}{mpath};
+  my $cmd2;
+  if ($minerbin =~ m/bfgminer/) {
+    $cmd2 = "ascdisable";
+  } else {
+    $cmd2 = "pgadisable";
+  }
+ &sendAPIcommand("$cmd2",$ascid);
 }
 
 sub setASCEnable {
  my $ascid = $_[0];
- &sendAPIcommand("ascenable",$ascid);
+  my $conf = &getConfig;
+  my %conf = %{$conf};
+  my $currmconf = ${$conf}{settings}{current_mconf};
+  my $minerbin = ${$conf}{miners}{$currmconf}{mpath};
+  my $cmd3;
+  if ($minerbin =~ m/bfgminer/) {
+    $cmd3 = "ascenable";
+  } else {
+    $cmd3 = "pgaenable";
+  }
+ &sendAPIcommand("$cmd3",$ascid);
 }
 
 sub setASCIntensity {
  my $ascid = $_[0];
  my $gint = $_[1];
  my $gif = "$ascid,$gint";
- &sendAPIcommand("ascintensity",$gif);
+   my $conf = &getConfig;
+  my %conf = %{$conf};
+  my $currmconf = ${$conf}{settings}{current_mconf};
+  my $minerbin = ${$conf}{miners}{$currmconf}{mpath};
+  my $cmd4;
+  if ($minerbin =~ m/bfgminer/) {
+    $cmd4 = "ascintensity";
+  } else {
+    $cmd4 = "pgaintensity";
+  }
+ &sendAPIcommand("$cmd4",$gif);
 }
 
 sub setASCRestart {
  my $ascid = $_[0];
- &sendAPIcommand("ascrestart",$ascid);
+   my $conf = &getConfig;
+  my %conf = %{$conf};
+  my $currmconf = ${$conf}{settings}{current_mconf};
+  my $minerbin = ${$conf}{miners}{$currmconf}{mpath};
+  my $cmd5;
+  if ($minerbin =~ m/bfgminer/) {
+    $cmd5 = "ascrestart";
+  } else {
+    $cmd5 = "pgarestart";
+  }
+ &sendAPIcommand("$cmd5",$ascid);
 }
 
 sub startCGMiner {
