@@ -99,7 +99,6 @@ if (defined $gdig) {
  &saveConfig();
  $gdig = "";
 }
-
 my $geng = $in{'geng'};
 if (defined $geng) {
  &setASCEnable($geng);
@@ -228,7 +227,7 @@ my $okascs = 0;
 my $problemascs = 0;
 
 if (@ascs) {
-	$a1put .= "<TABLE id='asccontent'><TR class='header'><TD class='header'>ASC</TD>";
+	$a1put .= "<TABLE id='asccontent'><TR class='header'><TD class='header'>ASIC</TD>";
 	$a1put .= "<TD class='header'>Status</TD>";
 	$a1put .= "<TD class='header'>Rate</TD>";
 	$a1put .= "<TD class='header'>Pool</TD>";
