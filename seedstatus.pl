@@ -30,6 +30,7 @@ if (defined $zreq) {
 my $preq = $in{'swpool'};
 if (defined $preq) {
   &switchPool($preq);
+  &resetPoolSuperPri;
   $preq = "";
 }
 
@@ -148,6 +149,10 @@ if ((defined $prl) && ($prl ne "")) {
 	$prl = "";
 }
 
+my $rpri = $in{'rpri'}; 
+	if (defined $rpri) {
+	&setPoolSuperPri($rpri);
+}
 # Now carry on
 
 my $miner_name = `hostname`;
@@ -233,7 +238,7 @@ if (@ascs) {
 	$a1put .= "<TD class='header'>Pool</TD>";
 	$a1put .= "<TD class='header' colspan=2>Accept/Reject</TD>";
 	$a1put .= "<TD class='header'>HW</TD>";
-	$a1put .= "<TD class='header'>Temp</TD></tr>";
+	$a1put .= "<TD class='header'>Temp</TD></tr>" if (defined $ascs[0]{'current_temp_0_c'}); 
 #	$a1put .= "<TD class='header'>Frequency</TD>";
 #	$a1put .= "<TD class='header'>Serial ID</TD>";
 
@@ -382,12 +387,16 @@ if (@ascs) {
 			
 		if ($i == $showasc)
 		{
+			if (defined $ascs[$i]{'current_temp_0_c'}) {
 			$asput .= "<tr><td>Temp:</td><td>" . sprintf("%.1f", $ascs[$i]{'current_temp_0_c'}) . ' C</td>';
+			}
 		}
+		if (defined $ascs[$i]{'current_temp_0_c'}) {
 		$aput .= '<td>';
-	
+		}	
+		if (defined $ascs[$i]{'current_temp_0_c'}) {
 		$aput .= sprintf("%.1f", $ascs[$i]{'current_temp_0_c'}) . ' C</td>';
-
+		}
 		if ($i == $showasc)
 		{
 			$agimg = "<br><img src='/IFMI/graphs/asc$i.png'>";
@@ -405,8 +414,13 @@ if (@ascs) {
 		}
 		else
 		{
+<<<<<<< HEAD
 			$aput = '<TR><TD class="bigger"><A href="' . $ascurl . '">' . $ascid  . $i . '</TD><TD><img src=/IFMI/ok24.png></td>' . $aput;
 			$okascs++;
+=======
+		$aput = '<TR><TD class="bigger"><A href="' . $ascurl . '">' . $ascid  . $i . '</TD><TD><img src=/IFMI/ok24.png></td>' . $aput;	
+		$okascs++;
+>>>>>>> facce67ec2e6e63d689103d217aa7ec2a0084f4f
 		}
 		$a1put .= $aput;
 		$problems = 0;
@@ -632,10 +646,11 @@ if ($ispriv eq "S") {
 		   $prr = "0.0";
 	    }
 	    my $prat; 
-	   	my $poola; my $poolnum;
-      for (keys %{$conf{pools}}) {
+	   	my $poola; my $poolnum; my $spri; 
+	    for (keys %{$conf{pools}}) {
       	if ($pname eq ${$conf}{pools}{$_}{url}) {
       		$poola = ${$conf}{pools}{$_}{alias};
+      		$spri = ${$conf}{pools}{$_}{spri};
       		$poolnum = $_;
       	}
       }
@@ -730,7 +745,13 @@ if ($ispriv eq "S") {
 	      	$psum .= "<input type='hidden' name='qpool' value='$i'>";
 	      	$psum .= "<input type='submit' value='Set'></form></td>";
 	      }
-	     	$psum .= "<td>" . $ppri . "</td>" if ($mstrategy eq "Failover");
+	     	if ($mstrategy eq "Failover") {
+	      	if ((defined $spri) && ($spri == 1)) {
+			     	$psum .= "<td bgcolor='yellow'>" . $ppri . "</td>";
+			    } else {
+			     	$psum .= "<td>" . $ppri . "</td>";
+			    }
+	     	}
       	$psum .= "</tr>";
       }
 	  }
@@ -741,7 +762,18 @@ if ($ispriv eq "S") {
 	  $psum .= "</td><td><input type='submit' value='Add'>"; 
 	  $psum .= "</td></form>";
 	  if ($mstrategy eq "Failover") {
-		  $psum .= "<TD class='header' colspan=2></td>";	  			
+		  $psum .= "<TD class='header' colspan=2><form name='padd' method='POST'>";
+			$psum .= "<select name='rpri'>";
+			for (my $i=0;$i<@pools+1;$i++) {
+				if (@pools>$i) {
+					my $pname = ${$pools[$i]}{'url'};
+	  	  	$psum .= "<option value=$pname>pool $i</option>";	  	  	
+	  	  } else { 
+	  	  	$psum .= "<option value='z'>off</option>";
+	  	  }
+  	  }
+		  $psum .= "</select><br><small>Super Pri</small> <input type='submit' value='Set'>";
+		  $psum .= "</form></td>";	  			
 	  }
 	  if ($mstrategy eq "Load Balance") {
 		  $psum .= "<TD class='header' colspan=2>Failover-Only:<br>$mfonly</td>";
