@@ -167,10 +167,7 @@ sub getCGMinerStats {
     $cmd = "asc";
   }
   my $res = &sendAPIcommand($cmd, $asc);
-<<<<<<< HEAD
 
-=======
->>>>>>> facce67ec2e6e63d689103d217aa7ec2a0084f4f
   if ($res =~ m/Name=(\w+),/) {
     $data->{'devid'} = $1;
   }   

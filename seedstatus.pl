@@ -414,13 +414,8 @@ if (@ascs) {
 		}
 		else
 		{
-<<<<<<< HEAD
 			$aput = '<TR><TD class="bigger"><A href="' . $ascurl . '">' . $ascid  . $i . '</TD><TD><img src=/IFMI/ok24.png></td>' . $aput;
 			$okascs++;
-=======
-		$aput = '<TR><TD class="bigger"><A href="' . $ascurl . '">' . $ascid  . $i . '</TD><TD><img src=/IFMI/ok24.png></td>' . $aput;	
-		$okascs++;
->>>>>>> facce67ec2e6e63d689103d217aa7ec2a0084f4f
 		}
 		$a1put .= $aput;
 		$problems = 0;
