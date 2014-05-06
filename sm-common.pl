@@ -15,6 +15,11 @@ use Sys::Syslog qw( :DEFAULT setlogsock);
 setlogsock('unix');
 use JSON::XS;
 use File::Copy;
+#Globals
+my $conf = &getConfig;
+my %conf = %{$conf};
+my $currmconf = ${$conf}{settings}{current_mconf};
+my $minerbin = ${$conf}{miners}{$currmconf}{mpath};
 
 sub addPool {
   my $purl = $_[0];
@@ -73,17 +78,13 @@ sub getCGMinerConfig {
   return(@mconfig);
 }
 sub getCGMinerASCCount {
-  my $conf = &getConfig;
-  my %conf = %{$conf};
-  my $currmconf = ${$conf}{settings}{current_mconf};
-  my $minerbin = ${$conf}{miners}{$currmconf}{mpath};
-  my $cmd1;
+  my $cmd;
   if ($minerbin =~ m/bfgminer/) {
-    $cmd1 = "pgacount";
+    $cmd = "pgacount";
   } else {
-    $cmd1 = "asccount";
+    $cmd = "asccount";
   }
-  my $data = &sendAPIcommand("$cmd1",);
+  my $data = &sendAPIcommand("$cmd",);
   while ($data =~ m/Count=(\d+)/g) {
     return $1; 
   }
@@ -159,11 +160,6 @@ sub getCGMinerPools {
 
 sub getCGMinerStats {
   my ($asc, $data, @pools) = @_;
-
-  my $conf = &getConfig;
-  my %conf = %{$conf};  
-  my $currmconf = ${$conf}{settings}{current_mconf}; 
-  my $minerbin = ${$conf}{miners}{$currmconf}{mpath}; 
   my $cmd;
   if ($minerbin =~ m/bfgminer/) {
     $cmd = "pga";
@@ -171,7 +167,10 @@ sub getCGMinerStats {
     $cmd = "asc";
   }
   my $res = &sendAPIcommand($cmd, $asc);
+<<<<<<< HEAD
 
+=======
+>>>>>>> facce67ec2e6e63d689103d217aa7ec2a0084f4f
   if ($res =~ m/Name=(\w+),/) {
     $data->{'devid'} = $1;
   }   
@@ -378,8 +377,6 @@ sub quotaPool {
 }
 
 sub saveConfig {
-  my $conf = &getConfig;
-  my %conf = %{$conf};
   my $runmconf = ${$conf}{settings}{running_mconf}; 
   my $savefile = ${$conf}{miners}{$runmconf}{savepath}; 
   if (-f $savefile) { 
@@ -393,8 +390,6 @@ sub saveConfig {
 sub sendAPIcommand {
   my $command = $_[0];
   my $cflags = $_[1];
-  my $conf = &getConfig;
-  my %conf = %{$conf};
   my $cgport = ${$conf}{settings}{cgminer_port};
   my $sock = new IO::Socket::INET (
     PeerAddr => '127.0.0.1',
@@ -425,71 +420,51 @@ sub sendAPIcommand {
 
 sub setASCDisable {
  my $ascid = $_[0];
-  my $conf = &getConfig;
-  my %conf = %{$conf};
-  my $currmconf = ${$conf}{settings}{current_mconf};
-  my $minerbin = ${$conf}{miners}{$currmconf}{mpath};
-  my $cmd2;
+  my $cmd;
   if ($minerbin =~ m/bfgminer/) {
-    $cmd2 = "pgadisable";
+    $cmd = "pgadisable";
   } else {
-    $cmd2 = "ascdisable";
+    $cmd = "ascdisable";
   }
- &sendAPIcommand("$cmd2",$ascid);
+ &sendAPIcommand("$cmd",$ascid);
 }
 
 sub setASCEnable {
  my $ascid = $_[0];
-  my $conf = &getConfig;
-  my %conf = %{$conf};
-  my $currmconf = ${$conf}{settings}{current_mconf};
-  my $minerbin = ${$conf}{miners}{$currmconf}{mpath};
-  my $cmd3;
+  my $cmd;
   if ($minerbin =~ m/bfgminer/) {
-    $cmd3 = "pgaenable";
+    $cmd = "pgaenable";
   } else {
-    $cmd3 = "ascenable";
+    $cmd = "ascenable";
   }
- &sendAPIcommand("$cmd3",$ascid);
+ &sendAPIcommand("$cmd",$ascid);
 }
 
 sub setASCIntensity {
  my $ascid = $_[0];
  my $gint = $_[1];
  my $gif = "$ascid,$gint";
-   my $conf = &getConfig;
-  my %conf = %{$conf};
-  my $currmconf = ${$conf}{settings}{current_mconf};
-  my $minerbin = ${$conf}{miners}{$currmconf}{mpath};
-  my $cmd4;
-  if ($minerbin =~ m/bfgminer/) {
-    $cmd4 = "pgaintensity";
+ my $cmd;
+ if ($minerbin =~ m/bfgminer/) {
+    $cmd = "pgaintensity";
   } else {
-    $cmd4 = "ascintensity";
+    $cmd = "ascintensity";
   }
- &sendAPIcommand("$cmd4",$gif);
+ &sendAPIcommand("$cmd",$gif);
 }
 
 sub setASCRestart {
  my $ascid = $_[0];
-   my $conf = &getConfig;
-  my %conf = %{$conf};
-  my $currmconf = ${$conf}{settings}{current_mconf};
-  my $minerbin = ${$conf}{miners}{$currmconf}{mpath};
-  my $cmd5;
-  if ($minerbin =~ m/bfgminer/) {
-    $cmd5 = "pgarestart";
+ my $cmd;
+ if ($minerbin =~ m/bfgminer/) {
+    $cmd = "pgarestart";
   } else {
-    $cmd5 = "ascrestart";
+    $cmd = "ascrestart";
   }
- &sendAPIcommand("$cmd5",$ascid);
+ &sendAPIcommand("$cmd",$ascid);
 }
 
 sub startCGMiner {
-  my $conf = &getConfig;
-  my %conf = %{$conf};  
-  my $currmconf = ${$conf}{settings}{current_mconf}; 
-  my $minerbin = ${$conf}{miners}{$currmconf}{mpath}; 
   if ($minerbin eq "") {
     die "No miner path defined! Exiting."; 
   }
@@ -513,6 +488,45 @@ sub stopCGMiner {
   &sendAPIcommand("quit",);
 }
 
+sub setPoolSuperPri {
+  my $spool = $_[0];
+  my $conffile = '/opt/ifmi/seedmanager.conf';
+  my $acount = 0;
+  for (keys %{$conf{pools}}) {
+    if ((${$conf}{pools}{$_}{spri} == 1) && ($spool ne ${$conf}{pools}{$_}{url})) {
+      ${$conf}{pools}{$_}{spri} = 0;
+    }
+    if ($spool eq ${$conf}{pools}{$_}{url}) {
+      ${$conf}{pools}{$_}{spri} = 1;
+      $acount++;
+    }
+  }
+  if ($acount == 0 && $spool ne "z") { 
+    my $newa = (keys %{$conf{pools}}); $newa++;
+    ${$conf}{pools}{$newa}{url} = $spool;
+    ${$conf}{pools}{$newa}{spri} = 1;
+  }
+  DumpFile($conffile, $conf); 
+  &resetPoolSuperPri;
+}
+
+sub resetPoolSuperPri {
+  my $pnum; my $spool = "x"; 
+  my @pools = &getCGMinerPools(1);
+  for (keys %{$conf{pools}}) {
+    my $spval = ${$conf}{pools}{$_}{spri};
+    if (defined $spval && $spval == 1) {
+      $spool = ${$conf}{pools}{$_}{url};
+    }
+  }
+  for (my $i=0;$i<@pools;$i++) {
+    my $pname = ${$pools[$i]}{'url'};
+    if ($spool eq $pname) {
+      $pnum = ${$pools[$i]}{'poolid'};
+      &sendAPIcommand("poolpriority",$pnum);
+    }
+  }
+}
 sub switchPool {
   my $preq = $_[0];
   &sendAPIcommand("switchpool",$preq);
