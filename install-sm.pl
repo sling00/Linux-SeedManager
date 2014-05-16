@@ -73,7 +73,9 @@ sub doInstall {
     	if (!-f $webdir . "/index.html.pre-ifmi") {
       	copy $webdir . "/index.html", $webdir . "/index.html.pre-ifmi" if (-f $webdir . "/index.html");
     	}
+    	if (!-f "/opt/ifmi/pm-common.pl" ) {
     	copy "index.html", $webdir;
+  		  }
     	copy "seedstatus.pl", $cgidir;
 			copy "sconfig.pl", $cgidir;
     	copy "confedit.pl", $cgidir;
