@@ -70,7 +70,7 @@ if ($ARGV[0] eq "boot") {
 if ($ARGV[0] eq "cleargraphs") {
   system('/bin/rm /opt/ifmi/rrdtool/*.rrd');
   system('/bin/rm /var/www/IFMI/graphs/*.png');
-  `/opt/ifmi/pmgraph.pl`;
+  `/opt/ifmi/smgraph.pl`;
 }
 
 if ($ARGV[0] eq "installht") {

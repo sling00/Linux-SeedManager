@@ -333,7 +333,7 @@ print "<td><input type='text' size='45' placeholder='/path/to/miner' name='nmp'>
 my $savepath = $mconf->{miners}->{$currentm}->{savepath}; 
 print "<tr><td>Miner Config<br><i><small>Click to edit</small></i></td>";
 print "<td colspan=2><small>--config</small> ";
-print "<a href='/cgi-bin/confedit.pl' target='_blank'>$savepath</a></td>";
+print "<a href='/cgi-bin/sconfedit.pl' target='_blank'>$savepath</a></td>";
 print "<td><input type='text' size='45' placeholder='/opt/ifmi/cgminer.conf' name='nsp'>";
 my $miner_opts = $mconf->{miners}->{$currentm}->{mopts};
 print "<tr><td>Miner Options</td><td colspan=2>$miner_opts</td>";

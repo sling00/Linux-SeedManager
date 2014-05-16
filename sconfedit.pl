@@ -24,7 +24,7 @@ my $savepath = $mconf->{miners}->{$currentm}->{savepath};
 our %in;
 &ReadParse(%in);
 my $confdata = $in{'configtext'};
-my $tempfile = "/tmp/confedit.tmp";
+my $tempfile = "/tmp/sconfedit.tmp";
 if (defined $confdata) {
   open my $fin, '>', $tempfile;
   print $fin $confdata;
@@ -52,7 +52,7 @@ print "<tr><td class=bigger>Hostname: $hostname </td></tr><tr><td>Config file: $
 my $owner = getpwuid((stat($savepath))[4]);
 print " - Owned by: $owner";
 print "<br><small><i>Change this filepath in the <a href='sconfig.pl'>settings</a></small></i></td></tr>";
-print "<tr><td><form name='configedit' action='confedit.pl' method='POST'>";
+print "<tr><td><form name='configedit' action='sconfedit.pl' method='POST'>";
 print "<textarea name='configtext' style='width:800px;height:600px'>$filedata</textarea>";
 print "</td></tr><tr><td>";
 #print " User: <input type='text' placeholder='username' name='lname' required>";

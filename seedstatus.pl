@@ -486,7 +486,7 @@ if (@summary) {
 
 			my $currconf = $conf{miners}{$currentm}{savepath};
 			$msput .= "<tr><td>Loaded Config:  </td><td colspan=3>";
-	    $msput .= "<a href='/cgi-bin/confedit.pl' target='_blank'>";
+	    $msput .= "<a href='/cgi-bin/sconfedit.pl' target='_blank'>";
 			$msput .= "$currconf</a></td></tr>";
 			$mrunt = "Stopped" if (!defined $mrunt); 
 	    $msput .= "<tr><td>Run time:</td><td>" . $mrunt . "</td>";
