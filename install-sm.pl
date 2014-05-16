@@ -78,7 +78,7 @@ sub doInstall {
   		  }
     	copy "seedstatus.pl", $cgidir;
 			copy "sconfig.pl", $cgidir;
-    	copy "confedit.pl", $cgidir;
+    	copy "sconfedit.pl", $cgidir;
     	copy "favicon.ico", $webdir;
     	copy "smcontrol", $appdir;
     	copy "sm-common.pl", $appdir;
