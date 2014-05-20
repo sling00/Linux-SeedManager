@@ -583,7 +583,8 @@ if (@summary) {
 				$mcontrol .= "</select></form></td>";
 			  $mcontrol .= "<td><form name='mstart' method='POST'><input type='hidden' name='mstart' value='start'><input type='submit' value='Start' onclick='this.disabled=true;this.form.submit();' > </form>";
 			}
-			$mcontrol .= "</td>";		
+			$mcontrol .= "</td>";
+			$mcontrol .= "<td><A href=/cgi-bin/status.pl>PoolManager</A></td>" if (-e "/usr/lib/cgi-bin/status.pl");		
 		}
   }
 }
