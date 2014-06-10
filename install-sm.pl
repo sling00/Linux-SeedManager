@@ -38,7 +38,21 @@ if ((defined $ARGV[0]) && ($ARGV[0] eq "-q")) {
 		die "Installation exited!\n";
 	}
 }
+	#Custom code
+sub choosehttpd {
+
+	my $hreply = <>; chomp $hreply; 
+			if ($hreply =~ m/a(pache)?/i) {
+			    $installtype = "apache"; 
+			} elsif ($hreply =~ m/l(ighttpd)?/i) {
+				$installtype = "lighttpd";
+			}
+}
+	#End custom code
+if (-e "/etc/apache") { $apacheinstall } elsif (-e "/etc/httpd") { $apacheinstall } elsif (-e "/etc/lighttpd/lighttpd.conf" ) { $lighttpinstall }
+
 sub doInstall {
+
 	my $flag = "x";;
 	$flag = $_[0] if (defined $_[0]);
 	use POSIX qw(strftime);
